@@ -1,0 +1,45 @@
+﻿id;artikelbezeichnung;preis;einheit;kategorie;unterkategorie;dachform;eindeckung;leistung_kw;kapazitaet_kwh;bild;aktiv
+TGA001;Schrägdachmontage;325,53;€/Stk.;Modulmontage;Schrägdach;Schrägdach;Dachziegel/Dachstein;;;;1
+TGA002;Schrägdachmontage mit Trapezblech-Befestigung;254,24;€/Stk.;Modulmontage;Schrägdach;Schrägdach;Trapezblech;;;;1
+TGA003;Schrägdachmontage mit Stockschrauben-Befestigung;268,89;€/Stk.;Modulmontage;Schrägdach;Schrägdach;Stockschraube;;;;1
+TGA004;Flachdachmontage Ost/West-Ausrichtung;299,22;€/Stk.;Modulmontage;Ost/West;Flachdach;;;;;1
+TGA005;Flachdachmontage Süd-Ausrichtung;299,22;€/Stk.;Modulmontage;Süd;Flachdach;;;;;1
+TGA006;Einrüstung (einfach - Südausrichtung);1320;€/Stk.;Geruest;;;;;;;1
+TGA007;Einrüstung (doppelt - Ost- und Westausrichtung);1980;€/Stk.;Geruest;;;;;;;1
+TGA008;Wechselrichter 3.0 (3,0 kW);99999,99;€/Stk.;Wechselrichter;;;;3.0;;bild3.jpg;1
+TGA009;Wechselrichter 4.0 (4,0 kW);99999,99;€/Stk.;Wechselrichter;;;;4.0;;bild3.jpg;1
+TGA010;Wechselrichter 5.0 (5,0 kW);99999,99;€/Stk.;Wechselrichter;;;;5.0;;bild3.jpg;1
+TGA011;Wechselrichter 6.0 (6,0 kW);99999,99;€/Stk.;Wechselrichter;;;;6.0;;bild3.jpg;1
+TGA012;Wechselrichter 7.0 (8,0 kW);99999,99;€/Stk.;Wechselrichter;;;;8.0;;bild3.jpg;1
+TGA013;Wechselrichter 10.0 (10,0 kW);99999,99;€/Stk.;Wechselrichter;;;;10.0;;bild3.jpg;1
+TGA014;Wechselrichter 15.0 (15,0 kW);99999,99;€/Stk.;Wechselrichter;;;;15.0;;bild3.jpg;1
+TGA015;Hybrid-Wechselrichter 3.0 (3,0 kW);2727,8;€/Stk.;Hybrid-Wechselrichter;;;;3.0;;bild3.jpg;1
+TGA016;Hybrid-Wechselrichter 4.0 (4,0 kW);2843,5;€/Stk.;Hybrid-Wechselrichter;;;;4.0;;bild3.jpg;1
+TGA017;Hybrid-Wechselrichter 5.0 (5,0 kW);2941;€/Stk.;Hybrid-Wechselrichter;;;;5.0;;bild3.jpg;1
+TGA018;Hybrid-Wechselrichter 6.0 (6,0 kW);3308,9;€/Stk.;Hybrid-Wechselrichter;;;;6.0;;bild3.jpg;1
+TGA019;Hybrid-Wechselrichter 8.0 (8,0 kW);3681,2;€/Stk.;Hybrid-Wechselrichter;;;;8.0;;bild3.jpg;1
+TGA020;Hybrid-Wechselrichter 10.0 (10,0 kW);3800,8;€/Stk.;Hybrid-Wechselrichter;;;;10.0;;bild3.jpg;1
+TGA021;Hybrid-Wechselrichter 12.0 (12,0 kW);3939,9;€/Stk.;Hybrid-Wechselrichter;;;;12.0;;bild3.jpg;1
+TGA022;Hybrid-Wechselrichter 15.0 (15,0 kW);4396,14;€/Stk.;Hybrid-Wechselrichter;;;;15.0;;bild3.jpg;1
+TGA023;BYD-Speicher 5,1 kWh HVS Modul;2905,37;€/Stk.;Speicher;;;;5.1;5.1;bild24.jpg;1
+TGA024;BYD-Speicher 7,7 kWh HVS Modul;3834,6;€/Stk.;Speicher;;;;7.7;7.7;bild24.jpg;1
+TGA025;BYD-Speicher 10,2 kWh HVS Modul;4763,83;€/Stk.;Speicher;;;;10.2;10.2;bild24.jpg;1
+TGA026;BYD-Speicher 12,8 kWh HVS Modul;5693,06;€/Stk.;Speicher;;;;12.8;12.8;bild24.jpg;1
+TGA027;BYD-Speicher 16,6 kWh HVM Modul;99999,99;€/Stk.;Speicher;;;;16.6;16.6;bild24.jpg;1
+TGA028;BYD-Speicher 19,3 kWh HVM Modul;99999,99;€/Stk.;Speicher;;;;19.3;19.3;bild24.jpg;1
+TGA029;BYD-Speicher 22,1 kWh HVM Modul;99999,99;€/Stk.;Speicher;;;;22.1;22.1;bild24.jpg;1
+TGA030;Netzumschaltbox Enwitec 20 kW;1474,75;€/Stk.;Notstrom/Zubehoer;;;;;;bild5.jpg;1
+TGA031;PV-Point;369,97;€/Stk.;Notstrom/Zubehoer;;;;;;bild6.jpg;1
+TGA032;Backup Switch;590,61;€/Stk.;Notstrom/Zubehoer;;;;;;bild7.jpg;1
+TGA033;Backup Controller;950,46;€/Stk.;Notstrom/Zubehoer;;;;;;bild8.jpg;1
+TGA034;Ohmpilot;1378,2;€/Stk.;Notstrom/Zubehoer;;;;;;bild9.jpg;1
+TGA035;11,0 kW Wattpilot Home (Standard) …ohne MID-Zähler;1434,85;€/Stk.;Wallbox;;;;11.0;;bild4.jpg;1
+TGA036;22,0 kW Wattpilot Home (Standard) …ohne MID-Zähler;1542,37;€/Stk.;Wallbox;;;;22.0;;bild4.jpg;1
+TGA037;11,0 kW Wattpilot Home (Standard) …mit MID-Zähler;1643,17;€/Stk.;Wallbox;;;;11.0;;bild4.jpg;1
+TGA038;Zählerschrank EFH Standard (110x55cm) mit einem Zählerplatz ohne Bestückung;1440,82;€/Stk.;Zaehlerschrank;;;;;;bild11.jpg;1
+TGA039;Zählerschrank EFH Standard (110x55cm) mit einem Zählerplatz mit Bestückung;2305,68;€/Stk.;Zaehlerschrank;;;;;;bild12.jpg;1
+TGA040;Zählerschrank EFH Standard (110x80cm) mit zwei Zählerplätzen ohne Bestückung;1767,26;€/Stk.;Zaehlerschrank;;;;;;bild13.jpg;1
+TGA041;Zählerschrank EFH Standard (110x80cm) mit zwei Zählerplätzen mit Bestückung;2758,38;€/Stk.;Zaehlerschrank;;;;;;bild14.jpg;1
+TGA042;Tigo Optimierer;55,05;€/Stk.;Optimierer;;;;;;bild2.jpg;1
+TGA043;Vorbereitung Wärmepumpenanschluss;602,29;€/Stk.;Extras;;;;;;bild15.jpg;1
+TGA044;Smart Grid;198,06;€/Stk.;Extras;;;;;;bild16.jpg;1
