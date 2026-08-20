@@ -17,7 +17,7 @@
           </p>
         </div>
         <div class="hero-right">
-          <small>Release: 1.0.3</small><img src="logo.png" alt="Peter Jensen" />
+          <small>Release: 1.0.4</small><img src="logo.png" alt="Peter Jensen" />
         </div>
       </section>
       <div class="layout">
@@ -84,17 +84,20 @@
           </section>
           <section class="panel" data-step="3">
             <h2>3. Standort</h2>
-            <p class="subtitle">Wo befindet sich das Projekt?</p>
-            <label
-              >Postleitzahl<input
-                id="plz"
-                inputmode="numeric"
-                maxlength="5"
-                placeholder="z. B. 21614" /></label
-            ><small class="muted"
-              >Die PLZ kann später zusätzlich für Entfernungs- und
-              Regionalprüfungen verwendet werden.</small
-            >
+            <p class="subtitle">Wählen Sie, wie die Entfernung zum Projekt ermittelt werden soll.</p>
+            <div class="choice-grid" id="distanceModeChoices">
+              <button type="button" data-v="plz" class="active"><b>Über PLZ ermitteln</b><small>Die angezeigte Entfernung ist eine Luftlinienentfernung und dient nur zur Orientierung.</small></button>
+              <button type="button" data-v="manual"><b>Entfernung direkt eingeben</b><small>Tragen Sie die Ihnen bekannte Entfernung zu PETER JENSEN 20537 Hamburg direkt in Kilometern ein.</small></button>
+            </div>
+            <div id="postcodeDistanceBox">
+              <label>Postleitzahl<input id="plz" inputmode="numeric" maxlength="5" placeholder="z. B. 21614" /></label>
+              <small class="muted">Die aus der PLZ ermittelte Entfernung ist die Luftlinie zu PETER JENSEN 20537 Hamburg und dient als Orientierungswert.</small>
+              <div id="postcodeResult" class="recommendation hidden"></div>
+            </div>
+            <div id="manualDistanceBox" class="hidden">
+              <label>Entfernung zu PETER JENSEN 20537 Hamburg in km<input id="manualDistanceKm" type="number" min="0" step="1" placeholder="z. B. 180" /></label>
+              <small id="manualDistanceHint" class="muted">Bitte geben Sie die tatsächliche bzw. Ihnen bekannte Entfernung in Kilometern ein.</small>
+            </div>
           </section>
           <section class="panel" data-step="4">
             <h2>4. Dachfläche</h2>
@@ -132,6 +135,7 @@
                 step="100"
                 placeholder="z. B. 5.800"
             /></label>
+            <div class="hint">Anhand des angegebenen Jahresstromverbrauchs wird zunächst die empfohlene Größe der Photovoltaikanlage ermittelt. Die verfügbare Dachfläche begrenzt dabei die maximal mögliche Modulanzahl.</div>
           </section>
           <section class="panel" data-step="6">
             <h2>6. Bestandsanlage</h2>
@@ -177,20 +181,17 @@
                 ><small>PV-Anlage ohne Batteriespeicher.</small>
               </button>
             </div>
+            <div class="sub">
+              <h3>Hersteller Wechselrichter</h3>
+              <p class="muted">Bitte wählen Sie den gewünschten Hersteller. Die passende Leistung wird anschließend automatisch aus der CSV ermittelt.</p>
+              <div class="choice-grid manufacturer-grid" id="inverterBrand"></div>
+            </div>
             <div id="storageDetails" class="sub hidden">
+              <h3>Hersteller Batteriespeicher</h3>
+              <div class="choice-grid manufacturer-grid" id="storageBrand"></div>
               <div id="storageReco" class="recommendation"></div>
-              <label
-                >Speichergröße<select id="storageSize">
-                  <option value="auto">Empfehlung übernehmen</option>
-                  <option>5.1</option>
-                  <option>7.7</option>
-                  <option>10.2</option>
-                  <option>12.8</option>
-                  <option>16.6</option>
-                  <option>19.3</option>
-                  <option>22.1</option>
-                </select></label
-              >
+              <label>Speichergröße<select id="storageSize"><option value="auto">Empfehlung übernehmen</option></select></label>
+              <small class="muted">Die verfügbaren Speichergrößen werden passend zum gewählten Hersteller aus der master_tga.csv geladen.</small>
             </div>
           </section>
           <section class="panel" data-step="8">
@@ -251,8 +252,12 @@
             </div>
 
             <div class="summary-box calc-box">
-              <strong>Berechnung</strong>
-              <div class="muted">Auf Basis Ihrer Eingaben wird nun die passende Artikelauswahl mit den benötigten Mengen ermittelt. Anschließend können Sie die ermittelten Positionen prüfen.</div>
+              <strong>Auslegungsvariante</strong>
+              <div class="muted">Wählen Sie, ob die Artikelauswahl auf der verbrauchsabhängigen Empfehlung oder auf der theoretisch maximal möglichen Modulanzahl der angegebenen Dachfläche basieren soll.</div>
+              <div class="choice-grid sizing-grid" id="sizingMode">
+                <button type="button" data-v="recommended" class="active"><b>Empfehlung</b><small id="recommendedSizingText">wird berechnet …</small></button>
+                <button type="button" data-v="maximum"><b>Theoretisch maximal</b><small id="maximumSizingText">wird berechnet …</small></button>
+              </div>
               <div class="btn-group calc-button-row"><button type="button" id="startCalculationBtn">Berechnung starten</button></div>
             </div>
           </section>
