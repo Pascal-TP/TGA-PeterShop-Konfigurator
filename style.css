@@ -51,8 +51,8 @@ body {
 }
 .hero-right img {
   display: block;
-  max-height: 123px;
-  max-width: 240px;
+  max-height: 184px;
+  max-width: 360px;
   margin-top: 8px;
   background: #ffffff18;
   border: 1px dashed #ffffff73;
@@ -420,7 +420,9 @@ td input {
   padding-bottom: 8px;
   border-bottom: 1px solid #e6ebf0;
 }
-.final-check-grid span { color: #44515f; }
+.final-check-grid span {
+  color: #44515f;
+}
 .notes-box {
   margin-top: 10px;
   max-height: 360px;
@@ -431,14 +433,25 @@ td input {
   margin: 18px 0 6px;
   color: #0a3157;
 }
-.notes-box h4:first-child { margin-top: 0; }
-.notes-box p { margin: 6px 0; line-height: 1.5; }
-.calc-button-row { margin-top: 12px; }
+.notes-box h4:first-child {
+  margin-top: 0;
+}
+.notes-box p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+.calc-button-row {
+  margin-top: 12px;
+}
 .result-panel {
   margin-top: 0;
 }
-.result-panel h2 { margin-top: 0; }
-.result-hint-box { margin-bottom: 16px; }
+.result-panel h2 {
+  margin-top: 0;
+}
+.result-hint-box {
+  margin-bottom: 16px;
+}
 .result-total-box {
   display: flex;
   justify-content: flex-end;
@@ -450,27 +463,54 @@ td input {
   border-radius: 10px;
   background: #f7f9fb;
 }
-.result-total-box strong { font-size: 1.12rem; color: #0a3157; }
-.result-price-note { text-align: right; color: #6c7782; font-size: .9rem; }
-.result-actions { display: flex; gap: 10px; margin-top: 16px; }
+.result-total-box strong {
+  font-size: 1.12rem;
+  color: #0a3157;
+}
+.result-price-note {
+  text-align: right;
+  color: #6c7782;
+  font-size: 0.9rem;
+}
+.result-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
 .result-visible > .panel,
 .result-visible > .nav,
-.result-visible > .step-hint { display: none !important; }
-.warning-text { color: #a13c28; font-weight: 600; }
+.result-visible > .step-hint {
+  display: none !important;
+}
+.warning-text {
+  color: #a13c28;
+  font-weight: 600;
+}
 @media (max-width: 760px) {
-  .final-check-grid { grid-template-columns: 1fr; }
+  .final-check-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Wie im NDF-Konfigurator: freigegebener Weiter-Button bekommt einen dezenten Hinweis. */
 @keyframes nextReadyPulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(11, 42, 74, 0); }
-  50% { transform: scale(1.035); box-shadow: 0 0 0 7px rgba(11, 42, 74, .10); }
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(11, 42, 74, 0);
+  }
+  50% {
+    transform: scale(1.035);
+    box-shadow: 0 0 0 7px rgba(11, 42, 74, 0.1);
+  }
 }
 #next.next-ready-attention {
   animation: nextReadyPulse 1.15s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  #next.next-ready-attention { animation: none; }
+  #next.next-ready-attention {
+    animation: none;
+  }
 }
 
 /* V1.0.4 – Hersteller-, Standort- und Variantenlogik */
@@ -516,15 +556,20 @@ td input {
   animation: nextReadyPulse 1.15s ease-in-out infinite;
 }
 @media (max-width: 900px) {
-  .manufacturer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .manufacturer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 @media (max-width: 700px) {
-  .manufacturer-grid { grid-template-columns: 1fr; }
+  .manufacturer-grid {
+    grid-template-columns: 1fr;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  #startCalculationBtn.calc-update-attention { animation: none; }
+  #startCalculationBtn.calc-update-attention {
+    animation: none;
+  }
 }
-
 
 /* Schritt 9: Dienstleistungen */
 .service-card {
@@ -534,19 +579,45 @@ td input {
   border-radius: 14px;
   background: #fff;
 }
-.service-card h3 { margin: 0 0 6px; }
-.service-list { display: grid; gap: 10px; margin-top: 14px; }
-.service-option {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 13px 14px; border: 1px solid #d9e2ea; border-radius: 10px;
-  background: #f8fafc; cursor: pointer;
+.service-card h3 {
+  margin: 0 0 6px;
 }
-.service-option:hover { background: #f1f6fa; }
-.service-option input { width: 19px; height: 19px; margin: 2px 0 0; flex: 0 0 auto; }
-.service-option span { display: flex; flex-direction: column; gap: 3px; }
-.service-option strong { color: #1f2933; font-weight: 700; }
-.service-option small { color: #66737f; }
-
+.service-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.service-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 14px;
+  border: 1px solid #d9e2ea;
+  border-radius: 10px;
+  background: #f8fafc;
+  cursor: pointer;
+}
+.service-option:hover {
+  background: #f1f6fa;
+}
+.service-option input {
+  width: 19px;
+  height: 19px;
+  margin: 2px 0 0;
+  flex: 0 0 auto;
+}
+.service-option span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.service-option strong {
+  color: #1f2933;
+  font-weight: 700;
+}
+.service-option small {
+  color: #66737f;
+}
 
 /* Release 1.0.4.4 - Hilfe / Bedienungsanleitung */
 .hero-help-btn {
@@ -565,7 +636,10 @@ td input {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 .hero-help-btn:hover,
 .hero-help-btn:focus-visible {
@@ -584,7 +658,9 @@ td input {
   padding: 20px;
   background: rgba(15, 23, 42, 0.72);
 }
-.help-modal-backdrop.hidden { display: none; }
+.help-modal-backdrop.hidden {
+  display: none;
+}
 .help-modal-box {
   width: min(1180px, 96vw);
   height: min(860px, 92vh);
@@ -673,11 +749,25 @@ td input {
   font-size: 12px;
   background: #fff;
 }
-body.help-modal-open { overflow: hidden; }
+body.help-modal-open {
+  overflow: hidden;
+}
 @media (max-width: 700px) {
-  .help-modal-backdrop { padding: 8px; }
-  .help-modal-box { width: 100%; height: 96vh; border-radius: 12px; }
-  .help-modal-head { padding: 14px 14px 10px; }
-  .help-modal-actions { padding: 8px 14px; }
-  .help-modal-note { padding: 8px 14px 10px; }
+  .help-modal-backdrop {
+    padding: 8px;
+  }
+  .help-modal-box {
+    width: 100%;
+    height: 96vh;
+    border-radius: 12px;
+  }
+  .help-modal-head {
+    padding: 14px 14px 10px;
+  }
+  .help-modal-actions {
+    padding: 8px 14px;
+  }
+  .help-modal-note {
+    padding: 8px 14px 10px;
+  }
 }
