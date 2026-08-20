@@ -492,6 +492,7 @@ async function loadPostcodeDistances() {
 initSteps();
 choose("building", "building", markCalculationDirty);
 choose("roof", "roof", (v) => { coverOptions(); markCalculationDirty(); });
+choose("cover", "cover", () => { markCalculationDirty(); });
 choose("existing", "existing", (v) => { $("existingDetails").classList.toggle("hidden", v !== "Erweiterung gewünscht"); markCalculationDirty(); });
 choose("storage", "storage", (v) => { $("storageDetails").classList.toggle("hidden", v !== "Ja"); if (v === "Ja") { updateStorageSizeOptions(); storageReco(); } markCalculationDirty(); });
 choose("dateChoice", "dateChoice");
