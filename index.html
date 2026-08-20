@@ -1,16 +1,309 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PeterShop Konfigurator Photovoltaik</title><link rel="icon" href="favicon.ico"><link rel="stylesheet" href="style.css"></head><body>
-<div class="app"><section class="hero"><div><h1>Konfigurator Photovoltaikanlage</h1><p>Schritt für Schritt zur passenden PV-Konfiguration für Ihr Projekt.</p></div><div class="hero-right"><small>Release: 1.0.2</small><img src="logo.png" alt="Peter Jensen"></div></section>
-<div class="layout"><aside class="steps"><h2>Schritte</h2><div id="steps"></div></aside><main class="content-card">
-<section class="panel active" data-step="0"><h2>Start</h2><p class="subtitle">Willkommen beim Konfigurator Photovoltaikanlage.</p><div class="info"><b>PV-Anlage passend zum Projekt konfigurieren.</b><p>Der Konfigurator führt durch Gebäude, Dach, Standort, Verbrauch, Bestandsanlage, Speicher und Zubehör. Auf Basis der Angaben wird in Schritt 10 eine erste Anlagenempfehlung mit passenden Positionen erstellt.</p></div><label>Projektnummer / Projektname<input id="project" placeholder="z. B. BV Mustermann / Projekt 2026-001"></label></section>
-<section class="panel" data-step="1"><h2>1. Gebäudeart</h2><p class="subtitle">Um welche Art von Gebäude handelt es sich?</p><div class="visual-grid" id="building"><button data-v="Einfamilienhaus"><span class="icon">🏠</span><b>Einfamilienhaus</b><small>Wohngebäude mit einer Nutzungseinheit</small></button><button data-v="Mehrfamilienhaus"><span class="icon">🏢</span><b>Mehrfamilienhaus</b><small>Wohngebäude mit mehreren Einheiten</small></button><button data-v="Halle / Gewerbe / Industrie"><span class="icon">🏭</span><b>Halle / Gewerbe / Industrie</b><small>Gewerbliche und industrielle Dachflächen</small></button></div></section>
-<section class="panel" data-step="2"><h2>2. Dachform und Eindeckung</h2><p class="subtitle">Bitte zuerst die Dachform und anschließend die passende Ausführung wählen.</p><div class="visual-grid two" id="roof"><button data-v="Schrägdach"><span class="roof-icon pitched">▰</span><b>Schrägdach</b><small>Geneigte Dachfläche</small></button><button data-v="Flachdach"><span class="roof-icon flat">▬</span><b>Flachdach</b><small>Flache bzw. gering geneigte Dachfläche</small></button></div><div id="coverBlock" class="sub hidden"><h3 id="coverTitle">Eindeckung</h3><div class="choice-grid" id="cover"></div></div></section>
-<section class="panel" data-step="3"><h2>3. Standort</h2><p class="subtitle">Wo befindet sich das Projekt?</p><label>Postleitzahl<input id="plz" inputmode="numeric" maxlength="5" placeholder="z. B. 21614"></label><small class="muted">Die PLZ kann später zusätzlich für Entfernungs- und Regionalprüfungen verwendet werden.</small></section>
-<section class="panel" data-step="4"><h2>4. Dachfläche</h2><p class="subtitle">Wie groß ist die grundsätzlich für Photovoltaik nutzbare Dachfläche?</p><label>Nutzbare Dachfläche in m²<input id="area" type="number" min="1" step="1" placeholder="z. B. 85"></label><div class="hint">Bitte nur Flächen berücksichtigen, die grundsätzlich mit PV-Modulen belegt werden können.</div></section>
-<section class="panel" data-step="5"><h2>5. Jährlicher Stromverbrauch</h2><p class="subtitle">Wie hoch ist der jährliche Stromverbrauch?</p><div class="choice-grid" id="consumptionQuick"><button data-v="2500">bis 3.000 kWh</button><button data-v="4000">3.000–5.000 kWh</button><button data-v="6500">5.000–8.000 kWh</button><button data-v="9000">über 8.000 kWh</button></div><label>Stromverbrauch in kWh/Jahr<input id="consumption" type="number" min="1" step="100" placeholder="z. B. 5.800"></label></section>
-<section class="panel" data-step="6"><h2>6. Bestandsanlage</h2><p class="subtitle">Ist bereits eine Photovoltaikanlage vorhanden?</p><div class="choice-grid" id="existing"><button data-v="Keine Bestandsanlage">Keine Bestandsanlage</button><button data-v="Bestandsanlage vorhanden">Vorhanden – keine Erweiterung</button><button data-v="Erweiterung gewünscht">Vorhanden – Erweiterung gewünscht</button></div><div id="existingDetails" class="sub hidden"><div class="form2"><label>Bestehende Leistung in kWp<input id="existingKwp" type="number" min="0" step="0.1" placeholder="z. B. 6,5"></label><label>Anzahl vorhandener Module <span class="optional">optional</span><input id="existingModules" type="number" min="0" step="1"></label></div></div></section>
-<section class="panel" data-step="7"><h2>7. Stromspeicher</h2><p class="subtitle">Soll ein Batteriespeicher berücksichtigt werden?</p><div class="visual-grid two" id="storage"><button data-v="Ja"><img src="bild24.jpg"><b>Ja, Speicher gewünscht</b><small>Speichergröße wird zunächst empfohlen.</small></button><button data-v="Nein"><span class="icon">☀️</span><b>Nein, ohne Speicher</b><small>PV-Anlage ohne Batteriespeicher.</small></button></div><div id="storageDetails" class="sub hidden"><div id="storageReco" class="recommendation"></div><label>Speichergröße<select id="storageSize"><option value="auto">Empfehlung übernehmen</option><option>5.1</option><option>7.7</option><option>10.2</option><option>12.8</option><option>16.6</option><option>19.3</option><option>22.1</option></select></label></div></section>
-<section class="panel" data-step="8"><h2>8. Weiteres Zubehör</h2><p class="subtitle">Welche zusätzlichen Komponenten sollen berücksichtigt werden?</p><div class="accessory-grid" id="accessories"><button data-v="Wallbox"><img src="bild4.jpg"><b>Wallbox</b></button><button data-v="Zählerschrank"><img src="bild11.jpg"><b>Zählerschrank</b></button><button data-v="Optimierer"><img src="bild2.jpg"><b>Optimierer</b></button><button data-v="Notstrom"><img src="bild7.jpg"><b>Notstrom</b></button><button data-v="Wärmepumpenvorbereitung"><span class="icon">♨️</span><b>Wärmepumpen&shy;vorbereitung</b></button><button data-v="Gerüst"><span class="icon">🏗️</span><b>Gerüst</b></button></div><div id="accessoryDetails" class="sub hidden"></div></section>
-<section class="panel" data-step="9"><h2>9. Wunschtermin</h2><p class="subtitle">Wann soll die Anlage idealerweise umgesetzt werden?</p><div class="choice-grid" id="dateChoice"><button data-v="So schnell wie möglich">So schnell wie möglich</button><button data-v="Innerhalb der nächsten 3 Monate">Innerhalb 3 Monate</button><button data-v="In 3–6 Monaten">In 3–6 Monaten</button><button data-v="Später als 6 Monate">Später als 6 Monate</button></div><label>Konkreter Wunschtermin <span class="optional">optional</span><input id="wishDate" type="date"></label></section>
-<section class="panel" data-step="10"><h2>10. Berechnung</h2><p class="subtitle">Erste Empfehlung auf Basis der erfassten Projektdaten.</p><div id="recommendation" class="recommendation big"></div><h3>Vorgeschlagene Positionen</h3><div class="table-wrap"><table><thead><tr><th>Übernehmen</th><th>Position</th><th>Menge</th><th>Einheit</th><th>Preis</th></tr></thead><tbody id="resultBody"></tbody></table></div><div class="hint warning">Version 1.0 dient als erster funktionaler Entwurf. Die endgültige Dimensionierungslogik, Peter-Jensen-Artikelnummern und finale Preise werden im nächsten Schritt abgestimmt.</div></section>
-<div class="nav"><button id="prev" class="secondary">Zurück</button><button id="next">Weiter</button></div><p id="stepHint" class="step-hint"></p></main>
-<aside class="summary"><h2>Aktuelle Auswahl</h2><button id="clear" class="danger">Alle Eingaben löschen</button><div id="summary"></div></aside></div></div><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PeterShop Konfigurator Photovoltaik</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <section class="hero">
+        <div>
+          <h1>Konfigurator Photovoltaikanlage</h1>
+          <p>
+            Schritt für Schritt zur passenden PV-Konfiguration für Ihr Projekt.
+          </p>
+        </div>
+        <div class="hero-right">
+          <small>Release: 1.0.3</small><img src="logo.png" alt="Peter Jensen" />
+        </div>
+      </section>
+      <div class="layout">
+        <aside class="steps">
+          <h2>Schritte</h2>
+          <div id="steps"></div>
+        </aside>
+        <main class="content-card" id="configPanel">
+          <section class="panel active" data-step="0">
+            <h2>Start</h2>
+            <p class="subtitle">
+              Willkommen beim Konfigurator Photovoltaikanlage.
+            </p>
+            <div class="info">
+              <b>PV-Anlage passend zum Projekt konfigurieren.</b>
+              <p>
+                Der Konfigurator führt durch Gebäude, Dach, Standort, Verbrauch,
+                Bestandsanlage, Speicher und Zubehör. Auf Basis der Angaben wird
+                in Schritt 10 eine erste Anlagenempfehlung mit passenden
+                Positionen erstellt.
+              </p>
+            </div>
+            <label
+              >Projektnummer / Projektname<input
+                id="project"
+                placeholder="z. B. BV Mustermann / Projekt 2026-001"
+            /></label>
+          </section>
+          <section class="panel" data-step="1">
+            <h2>1. Gebäudeart</h2>
+            <p class="subtitle">Um welche Art von Gebäude handelt es sich?</p>
+            <div class="visual-grid" id="building">
+              <button data-v="Einfamilienhaus">
+                <span class="icon">🏠</span><b>Einfamilienhaus</b
+                ><small>Wohngebäude mit einer Nutzungseinheit</small></button
+              ><button data-v="Mehrfamilienhaus">
+                <span class="icon">🏢</span><b>Mehrfamilienhaus</b
+                ><small>Wohngebäude mit mehreren Einheiten</small></button
+              ><button data-v="Halle / Gewerbe / Industrie">
+                <span class="icon">🏭</span><b>Halle / Gewerbe / Industrie</b
+                ><small>Gewerbliche und industrielle Dachflächen</small>
+              </button>
+            </div>
+          </section>
+          <section class="panel" data-step="2">
+            <h2>2. Dachform und Eindeckung</h2>
+            <p class="subtitle">
+              Bitte zuerst die Dachform und anschließend die passende Ausführung
+              wählen.
+            </p>
+            <div class="visual-grid two" id="roof">
+              <button data-v="Schrägdach">
+                <span class="roof-icon pitched">▰</span><b>Schrägdach</b
+                ><small>Geneigte Dachfläche</small></button
+              ><button data-v="Flachdach">
+                <span class="roof-icon flat">▬</span><b>Flachdach</b
+                ><small>Flache bzw. gering geneigte Dachfläche</small>
+              </button>
+            </div>
+            <div id="coverBlock" class="sub hidden">
+              <h3 id="coverTitle">Eindeckung</h3>
+              <div class="choice-grid" id="cover"></div>
+            </div>
+          </section>
+          <section class="panel" data-step="3">
+            <h2>3. Standort</h2>
+            <p class="subtitle">Wo befindet sich das Projekt?</p>
+            <label
+              >Postleitzahl<input
+                id="plz"
+                inputmode="numeric"
+                maxlength="5"
+                placeholder="z. B. 21614" /></label
+            ><small class="muted"
+              >Die PLZ kann später zusätzlich für Entfernungs- und
+              Regionalprüfungen verwendet werden.</small
+            >
+          </section>
+          <section class="panel" data-step="4">
+            <h2>4. Dachfläche</h2>
+            <p class="subtitle">
+              Wie groß ist die grundsätzlich für Photovoltaik nutzbare
+              Dachfläche?
+            </p>
+            <label
+              >Nutzbare Dachfläche in m²<input
+                id="area"
+                type="number"
+                min="1"
+                step="1"
+                placeholder="z. B. 85"
+            /></label>
+            <div class="hint">
+              Bitte nur Flächen berücksichtigen, die grundsätzlich mit
+              PV-Modulen belegt werden können.
+            </div>
+          </section>
+          <section class="panel" data-step="5">
+            <h2>5. Jährlicher Stromverbrauch</h2>
+            <p class="subtitle">Wie hoch ist der jährliche Stromverbrauch?</p>
+            <div class="choice-grid" id="consumptionQuick">
+              <button data-v="2500">bis 3.000 kWh</button
+              ><button data-v="4000">3.000–5.000 kWh</button
+              ><button data-v="6500">5.000–8.000 kWh</button
+              ><button data-v="9000">über 8.000 kWh</button>
+            </div>
+            <label
+              >Stromverbrauch in kWh/Jahr<input
+                id="consumption"
+                type="number"
+                min="1"
+                step="100"
+                placeholder="z. B. 5.800"
+            /></label>
+          </section>
+          <section class="panel" data-step="6">
+            <h2>6. Bestandsanlage</h2>
+            <p class="subtitle">
+              Ist bereits eine Photovoltaikanlage vorhanden?
+            </p>
+            <div class="choice-grid" id="existing">
+              <button data-v="Keine Bestandsanlage">Keine Bestandsanlage</button
+              ><button data-v="Bestandsanlage vorhanden">
+                Vorhanden – keine Erweiterung</button
+              ><button data-v="Erweiterung gewünscht">
+                Vorhanden – Erweiterung gewünscht
+              </button>
+            </div>
+            <div id="existingDetails" class="sub hidden">
+              <div class="form2">
+                <label
+                  >Bestehende Leistung in kWp<input
+                    id="existingKwp"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    placeholder="z. B. 6,5" /></label
+                ><label
+                  >Anzahl vorhandener Module
+                  <span class="optional">optional</span
+                  ><input id="existingModules" type="number" min="0" step="1"
+                /></label>
+              </div>
+            </div>
+          </section>
+          <section class="panel" data-step="7">
+            <h2>7. Stromspeicher</h2>
+            <p class="subtitle">
+              Soll ein Batteriespeicher berücksichtigt werden?
+            </p>
+            <div class="visual-grid two" id="storage">
+              <button data-v="Ja">
+                <img src="bild24.jpg" /><b>Ja, Speicher gewünscht</b
+                ><small>Speichergröße wird zunächst empfohlen.</small></button
+              ><button data-v="Nein">
+                <span class="icon">☀️</span><b>Nein, ohne Speicher</b
+                ><small>PV-Anlage ohne Batteriespeicher.</small>
+              </button>
+            </div>
+            <div id="storageDetails" class="sub hidden">
+              <div id="storageReco" class="recommendation"></div>
+              <label
+                >Speichergröße<select id="storageSize">
+                  <option value="auto">Empfehlung übernehmen</option>
+                  <option>5.1</option>
+                  <option>7.7</option>
+                  <option>10.2</option>
+                  <option>12.8</option>
+                  <option>16.6</option>
+                  <option>19.3</option>
+                  <option>22.1</option>
+                </select></label
+              >
+            </div>
+          </section>
+          <section class="panel" data-step="8">
+            <h2>8. Weiteres Zubehör</h2>
+            <p class="subtitle">
+              Welche zusätzlichen Komponenten sollen berücksichtigt werden?
+            </p>
+            <div class="accessory-grid" id="accessories">
+              <button data-v="Wallbox">
+                <img src="bild4.jpg" /><b>Wallbox</b></button
+              ><button data-v="Zählerschrank">
+                <img src="bild11.jpg" /><b>Zählerschrank</b></button
+              ><button data-v="Optimierer">
+                <img src="bild2.jpg" /><b>Optimierer</b></button
+              ><button data-v="Notstrom">
+                <img src="bild7.jpg" /><b>Notstrom</b></button
+              ><button data-v="Wärmepumpenvorbereitung">
+                <span class="icon">♨️</span
+                ><b>Wärmepumpen&shy;vorbereitung</b></button
+              ><button data-v="Gerüst">
+                <span class="icon">🏗️</span><b>Gerüst</b>
+              </button>
+            </div>
+            <div id="accessoryDetails" class="sub hidden"></div>
+          </section>
+          <section class="panel" data-step="9">
+            <h2>9. Wunschtermin</h2>
+            <p class="subtitle">
+              Wann soll die Anlage idealerweise umgesetzt werden?
+            </p>
+            <div class="choice-grid" id="dateChoice">
+              <button data-v="So schnell wie möglich">
+                So schnell wie möglich</button
+              ><button data-v="Innerhalb der nächsten 3 Monate">
+                Innerhalb 3 Monate</button
+              ><button data-v="In 3–6 Monaten">In 3–6 Monaten</button
+              ><button data-v="Später als 6 Monate">Später als 6 Monate</button>
+            </div>
+            <label
+              >Konkreter Wunschtermin <span class="optional">optional</span
+              ><input id="wishDate" type="date"
+            /></label>
+          </section>
+          <section class="panel" data-step="10">
+            <h2>10. Berechnung starten</h2>
+            <p class="subtitle">Erst mit diesem Button wird die passende Artikelauswahl mit den benötigten Mengen für Ihr Projekt ermittelt.</p>
+
+            <div class="summary-box final-check-box">
+              <strong>Prüfung</strong>
+              <div id="finalCheck" class="muted">Die aktuelle Auswahl wird hier zusammengefasst.</div>
+            </div>
+
+            <div class="summary-box notes-summary-box">
+              <strong>Allgemeine und technische Hinweise</strong>
+              <div id="technicalNotes" class="notes-box">
+                <p class="muted">Die Hinweise aus der master_tga.csv werden geladen …</p>
+              </div>
+            </div>
+
+            <div class="summary-box calc-box">
+              <strong>Berechnung</strong>
+              <div class="muted">Auf Basis Ihrer Eingaben wird nun die passende Artikelauswahl mit den benötigten Mengen ermittelt. Anschließend können Sie die ermittelten Positionen prüfen.</div>
+              <div class="btn-group calc-button-row"><button type="button" id="startCalculationBtn">Berechnung starten</button></div>
+            </div>
+          </section>
+
+          <section id="resultPanel" class="result-panel hidden">
+            <h2>Ergebnis</h2>
+            <p class="subtitle">Die folgenden Artikel wurden anhand Ihrer Auswahl ermittelt.</p>
+
+            <div class="summary-box result-hint-box">
+              <strong>Hinweis</strong>
+              <p>Hier sehen Sie das ermittelte Ergebnis. Entfernen Sie den jeweiligen Haken, wenn eine Position nicht übernommen werden soll. Die endgültige Auslegungs- und Übergabelogik wird in den nächsten Ausbaustufen weiter verfeinert.</p>
+            </div>
+
+            <div id="recommendation" class="recommendation big"></div>
+
+            <div class="table-wrap result-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Übernehmen</th>
+                    <th>Artikel-Nr.</th>
+                    <th>Beschreibung</th>
+                    <th>Menge</th>
+                    <th>Einheit</th>
+                    <th>Einzelpreis</th>
+                    <th>Gesamt</th>
+                  </tr>
+                </thead>
+                <tbody id="resultBody"></tbody>
+              </table>
+              <div class="result-total-box"><span>Summe netto:</span><strong id="resultTotalNet">0,00 €</strong></div>
+              <p class="result-price-note">Alle Preise sind unverbindliche Verrechnungspreise ohne Mehrwertsteuer.</p>
+            </div>
+
+            <div class="result-actions">
+              <button type="button" id="backToConfigBtn" class="secondary">Zurück zur Konfiguration</button>
+            </div>
+          </section>
+          <div class="nav">
+            <button id="prev" class="secondary">Zurück</button
+            ><button id="next">Weiter</button>
+          </div>
+          <p id="stepHint" class="step-hint"></p>
+        </main>
+        <aside class="summary">
+          <h2>Aktuelle Auswahl</h2>
+          <button id="clear" class="danger">Alle Eingaben löschen</button>
+          <div id="summary"></div>
+        </aside>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

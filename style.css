@@ -400,3 +400,75 @@ td input {
     display: none;
   }
 }
+
+/* V1.0.3 – Ergebnis- und Hinweisbereich näher am NDF-Konfigurator */
+.final-check-box,
+.notes-summary-box,
+.calc-box {
+  margin-top: 16px;
+}
+.final-check-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+  margin-top: 12px;
+}
+.final-check-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e6ebf0;
+}
+.final-check-grid span { color: #44515f; }
+.notes-box {
+  margin-top: 10px;
+  max-height: 360px;
+  overflow: auto;
+  padding-right: 8px;
+}
+.notes-box h4 {
+  margin: 18px 0 6px;
+  color: #0a3157;
+}
+.notes-box h4:first-child { margin-top: 0; }
+.notes-box p { margin: 6px 0; line-height: 1.5; }
+.calc-button-row { margin-top: 12px; }
+.result-panel {
+  margin-top: 0;
+}
+.result-panel h2 { margin-top: 0; }
+.result-hint-box { margin-bottom: 16px; }
+.result-total-box {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid #d7e0e8;
+  border-radius: 10px;
+  background: #f7f9fb;
+}
+.result-total-box strong { font-size: 1.12rem; color: #0a3157; }
+.result-price-note { text-align: right; color: #6c7782; font-size: .9rem; }
+.result-actions { display: flex; gap: 10px; margin-top: 16px; }
+.result-visible > .panel,
+.result-visible > .nav,
+.result-visible > .step-hint { display: none !important; }
+.warning-text { color: #a13c28; font-weight: 600; }
+@media (max-width: 760px) {
+  .final-check-grid { grid-template-columns: 1fr; }
+}
+
+/* Wie im NDF-Konfigurator: freigegebener Weiter-Button bekommt einen dezenten Hinweis. */
+@keyframes nextReadyPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(11, 42, 74, 0); }
+  50% { transform: scale(1.035); box-shadow: 0 0 0 7px rgba(11, 42, 74, .10); }
+}
+#next.next-ready-attention {
+  animation: nextReadyPulse 1.15s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  #next.next-ready-attention { animation: none; }
+}
