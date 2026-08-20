@@ -30,6 +30,13 @@ MODULE.areaM2 = MODULE.lengthM * MODULE.widthM;
 const $ = (id) => document.getElementById(id);
 const panels = [...document.querySelectorAll(".panel")];
 
+const helpBtn = $("helpBtn");
+const helpModal = $("helpModal");
+const helpCloseBtn = $("helpCloseBtn");
+const helpPdfFrame = $("helpPdfFrame");
+const helpOpenPdfBtn = $("helpOpenPdfBtn");
+const HELP_PDF_URL = "Bedienungsanleitung_PeterJensen_TGA-Konfigurator_Kunden.pdf";
+
 function initSteps() {
   $("steps").innerHTML = labels.map((label, i) =>
     `<div class="step-item ${i ? "locked" : "active"}" data-i="${i}"><span class="num">${i}</span><span>${label}</span></div>`
@@ -531,6 +538,36 @@ async function loadPostcodeDistances() {
     return { ort: row.ort || "", plz: normalizePlz(row.plz), bundesland: row.bundesland || "", km: parseGermanNumber(row.km) };
   }).filter((row) => row.plz && row.km > 0);
 }
+
+function openHelpModal() {
+  if (!helpModal) return;
+
+  if (helpPdfFrame && helpPdfFrame.getAttribute("src") !== `${HELP_PDF_URL}#view=FitH`) {
+    helpPdfFrame.setAttribute("src", `${HELP_PDF_URL}#view=FitH`);
+  }
+
+  if (helpOpenPdfBtn) helpOpenPdfBtn.setAttribute("href", HELP_PDF_URL);
+
+  helpModal.classList.remove("hidden");
+  document.body.classList.add("help-modal-open");
+  window.setTimeout(() => helpCloseBtn?.focus(), 0);
+}
+
+function closeHelpModal() {
+  if (!helpModal) return;
+  helpModal.classList.add("hidden");
+  document.body.classList.remove("help-modal-open");
+  helpBtn?.focus();
+}
+
+helpBtn?.addEventListener("click", openHelpModal);
+helpCloseBtn?.addEventListener("click", closeHelpModal);
+helpModal?.addEventListener("click", (event) => {
+  if (event.target === helpModal) closeHelpModal();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && helpModal && !helpModal.classList.contains("hidden")) closeHelpModal();
+});
 
 initSteps();
 choose("building", "building", markCalculationDirty);

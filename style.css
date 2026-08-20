@@ -546,3 +546,138 @@ td input {
 .service-option span { display: flex; flex-direction: column; gap: 3px; }
 .service-option strong { color: #1f2933; font-weight: 700; }
 .service-option small { color: #66737f; }
+
+
+/* Release 1.0.4.4 - Hilfe / Bedienungsanleitung */
+.hero-help-btn {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  min-height: 40px;
+  padding: 9px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.hero-help-btn:hover,
+.hero-help-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: #fff;
+  transform: translateY(-1px);
+  outline: none;
+}
+.help-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.72);
+}
+.help-modal-backdrop.hidden { display: none; }
+.help-modal-box {
+  width: min(1180px, 96vw);
+  height: min(860px, 92vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+}
+.help-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.help-modal-head h3 {
+  margin: 0 0 4px;
+  color: var(--p);
+  font-size: 21px;
+}
+.help-modal-head p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.help-close-btn {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #fff;
+  color: #374151;
+  font-size: 27px;
+  line-height: 1;
+  cursor: pointer;
+}
+.help-close-btn:hover,
+.help-close-btn:focus-visible {
+  background: #f3f4f6;
+  outline: none;
+}
+.help-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+}
+.help-open-pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  background: var(--p);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+.help-open-pdf-btn:hover,
+.help-open-pdf-btn:focus-visible {
+  background: var(--ph);
+  outline: none;
+}
+.help-pdf-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #dfe4ea;
+}
+.help-pdf-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+.help-modal-note {
+  margin: 0;
+  padding: 9px 20px 11px;
+  color: var(--muted);
+  font-size: 12px;
+  background: #fff;
+}
+body.help-modal-open { overflow: hidden; }
+@media (max-width: 700px) {
+  .help-modal-backdrop { padding: 8px; }
+  .help-modal-box { width: 100%; height: 96vh; border-radius: 12px; }
+  .help-modal-head { padding: 14px 14px 10px; }
+  .help-modal-actions { padding: 8px 14px; }
+  .help-modal-note { padding: 8px 14px 10px; }
+}

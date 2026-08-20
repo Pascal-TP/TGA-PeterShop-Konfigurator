@@ -12,12 +12,13 @@
       <section class="hero">
         <div>
           <h1>Konfigurator Photovoltaikanlage</h1>
-          <p>
-            Schritt für Schritt zur passenden PV-Konfiguration für Ihr Projekt.
-          </p>
+          <p>Bei Fragen zum Konfigurator wenden Sie sich bitte an Ihren Paten im Hause Peter Jensen.</p>
+          <button type="button" id="helpBtn" class="hero-help-btn" aria-haspopup="dialog" aria-controls="helpModal">
+            Hilfe / Bedienungsanleitung
+          </button>
         </div>
         <div class="hero-right">
-          <small>Release: 1.0.4</small><img src="logo.png" alt="Peter Jensen" />
+          <small>Release: 1.0.4.4</small><img src="logo.png" alt="Peter Jensen" />
         </div>
       </section>
       <div class="layout">
@@ -315,6 +316,37 @@
         </aside>
       </div>
     </div>
+
+    <div id="helpModal" class="help-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+      <div class="help-modal-box">
+        <div class="help-modal-head">
+          <div>
+            <h3 id="helpModalTitle">Hilfe / Bedienungsanleitung</h3>
+            <p>Hier finden Sie die Bedienungsanleitung für den PeterJensen-TGA-Konfigurator.</p>
+          </div>
+          <button type="button" id="helpCloseBtn" class="help-close-btn" aria-label="Hilfefenster schließen">×</button>
+        </div>
+
+        <div class="help-modal-actions">
+          <a id="helpOpenPdfBtn" class="help-open-pdf-btn" href="Bedienungsanleitung_PeterJensen_TGA-Konfigurator_Kunden.pdf" target="_blank" rel="noopener">
+            PDF in neuem Tab öffnen
+          </a>
+        </div>
+
+        <div class="help-pdf-wrap">
+          <iframe
+            id="helpPdfFrame"
+            title="Bedienungsanleitung PeterJensen-TGA-Konfigurator"
+            src="Bedienungsanleitung_PeterJensen_TGA-Konfigurator_Kunden.pdf#view=FitH"
+          ></iframe>
+        </div>
+
+        <p class="help-modal-note">
+          Sollte die PDF-Vorschau in Ihrem Browser nicht angezeigt werden, verwenden Sie bitte „PDF in neuem Tab öffnen“.
+        </p>
+      </div>
+    </div>
+
     <script src="app.js"></script>
   </body>
 </html>
