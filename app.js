@@ -1,7 +1,7 @@
 const labels = [
   "Start", "Gebäudeart", "Dachform & Eindeckung", "Standort", "Dachfläche",
   "Stromverbrauch", "Bestandsanlage", "Stromspeicher", "Weiteres Zubehör",
-  "Wunschtermin", "Berechnung",
+  "Wunschtermin & Dienstleistungen", "Berechnung",
 ];
 
 const s = {
@@ -12,7 +12,7 @@ const s = {
   accessories: [], accessoryOptions: {
     wallboxBrand: "", wallboxArticle: "", cabinet: "", backup: "", scaffoldOrientation: "",
   },
-  dateChoice: "", wishDate: "", sizingMode: "recommended",
+  dateChoice: "", wishDate: "", services: [], sizingMode: "recommended",
   products: [], calculated: false, calculationDirty: false,
 };
 
@@ -352,6 +352,7 @@ function update() {
     ["Wechselrichter", s.inverterBrand || "Hersteller noch offen"],
     ["Speicher", s.storage ? (s.storage === "Ja" ? `Gewünscht${s.storageBrand ? ` · ${s.storageBrand}` : ""}` : "Nicht gewünscht") : "Noch nicht gewählt"],
     ["Zubehör", s.accessories.length ? s.accessories.join(" · ") : "Noch nichts gewählt"],
+    ["Dienstleistungen", s.services.length ? s.services.map((nr) => master.find((p) => p.artikelnummer === nr)?.artikelbezeichnung).filter(Boolean).join(" · ") : "Keine ausgewählt"],
     ["Wunschtermin", s.wishDate ? new Date(s.wishDate + "T00:00").toLocaleDateString("de-DE") : s.dateChoice || "Noch offen"],
   ];
   let html = boxes.map(([title, value]) => `<div class="summary-box"><b>${title}</b><span>${escapeHtml(value)}</span></div>`).join("");
@@ -410,6 +411,21 @@ function pickDistanceSurcharge() {
   if (km <= 300) return master.find((p) => p.artikelnummer === "H66TG502501") || findByDescription(["entfernungspauschale", "200"]);
   return master.find((p) => p.artikelnummer === "H66TG503001") || findByDescription(["entfernungspauschale", "300"]);
 }
+function serviceProducts() {
+  return productsByCategory("Dienstleistung");
+}
+function renderServices() {
+  const box = $("servicesList"); if (!box) return;
+  const services = serviceProducts();
+  if (!services.length) {
+    box.innerHTML = '<p class="muted">In der master_tga.csv sind derzeit keine Dienstleistungen hinterlegt.</p>';
+    return;
+  }
+  box.innerHTML = services.map((p) => {
+    const checked = s.services.includes(p.artikelnummer) ? " checked" : "";
+    return `<label class="service-option"><input type="checkbox" value="${escapeHtml(p.artikelnummer)}"${checked}><span><strong>${escapeHtml(p.artikelbezeichnung)}</strong>${p.preis ? `<small>${formatCurrency(parseGermanNumber(p.preis))} ${escapeHtml(p.einheit || "")}</small>` : ""}</span></label>`;
+  }).join("");
+}
 function buildProductList() {
   const r = selectedSizing(); const list = [];
   add(list, pickModuleMounting(), r.modules); add(list, pickInverter(r.kwp));
@@ -422,6 +438,7 @@ function buildProductList() {
   if (s.accessories.includes("Notstrom")) add(list, pickBackup());
   if (s.accessories.includes("Wärmepumpenvorbereitung")) add(list, findByDescription("vorbereitung wärmepumpenanschluss"));
   if (s.accessories.includes("Gerüst")) add(list, pickScaffold());
+  s.services.forEach((articleNumber) => add(list, master.find((p) => p.artikelnummer === articleNumber)));
   add(list, pickDistanceSurcharge());
   return list;
 }
@@ -442,6 +459,7 @@ function renderFinalCheck() {
     <div><strong>Wechselrichter-Hersteller</strong><span>${escapeHtml(s.inverterBrand || "offen")}</span></div>
     <div><strong>Speicher</strong><span>${escapeHtml(storageText)}</span></div>
     <div><strong>Zubehör</strong><span>${escapeHtml(s.accessories.join(" · ") || "Kein zusätzliches Zubehör")}</span></div>
+    <div><strong>Dienstleistungen</strong><span>${escapeHtml(s.services.length ? s.services.map((nr) => master.find((p) => p.artikelnummer === nr)?.artikelbezeichnung).filter(Boolean).join(" · ") : "Keine ausgewählt")}</span></div>
     <div><strong>Wunschtermin</strong><span>${escapeHtml(s.wishDate ? new Date(s.wishDate + "T00:00").toLocaleDateString("de-DE") : s.dateChoice || "Keine Angabe")}</span></div>
   </div>`;
 }
@@ -502,7 +520,7 @@ async function loadMaster() {
   }).filter((row, index) => !(index === 0 && normalizeText(row.artikelnummer) === "artikelnummer"));
   technicalNotes = rows.filter((row) => normalizeText(row.kategorie) === "technische hinweise");
   master = rows.filter((row) => row.artikelnummer && normalizeText(row.kategorie) !== "technische hinweise");
-  renderTechnicalNotes(); renderManufacturerChoices(); accessoryDetails();
+  renderTechnicalNotes(); renderManufacturerChoices(); accessoryDetails(); renderServices();
 }
 async function loadPostcodeDistances() {
   const response = await fetch("german-postgeocodes.csv"); if (!response.ok) throw new Error("german-postgeocodes.csv konnte nicht geladen werden.");
@@ -556,6 +574,14 @@ $("storageBrand").addEventListener("click", (e) => {
   [...$("storageBrand").querySelectorAll("button")].forEach((x) => x.classList.toggle("active", x === b));
   s.storageBrand = b.dataset.v; s.storageSize = "auto"; updateStorageSizeOptions(); markCalculationDirty(); update();
 });
+$("servicesList")?.addEventListener("change", (e) => {
+  const checkbox = e.target.closest('input[type="checkbox"]'); if (!checkbox) return;
+  const articleNumber = checkbox.value;
+  if (checkbox.checked) s.services = [...new Set([...s.services, articleNumber])];
+  else s.services = s.services.filter((nr) => nr !== articleNumber);
+  markCalculationDirty(); update();
+});
+
 $("sizingMode").addEventListener("click", (e) => {
   const b = e.target.closest("button[data-v]"); if (!b || b.disabled || s.sizingMode === b.dataset.v) return;
   s.sizingMode = b.dataset.v; renderSizingChoices(); markCalculationDirty(); renderFinalCheck();

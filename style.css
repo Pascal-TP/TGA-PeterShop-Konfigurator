@@ -524,3 +524,25 @@ td input {
 @media (prefers-reduced-motion: reduce) {
   #startCalculationBtn.calc-update-attention { animation: none; }
 }
+
+
+/* Schritt 9: Dienstleistungen */
+.service-card {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid #d9e2ea;
+  border-radius: 14px;
+  background: #fff;
+}
+.service-card h3 { margin: 0 0 6px; }
+.service-list { display: grid; gap: 10px; margin-top: 14px; }
+.service-option {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 13px 14px; border: 1px solid #d9e2ea; border-radius: 10px;
+  background: #f8fafc; cursor: pointer;
+}
+.service-option:hover { background: #f1f6fa; }
+.service-option input { width: 19px; height: 19px; margin: 2px 0 0; flex: 0 0 auto; }
+.service-option span { display: flex; flex-direction: column; gap: 3px; }
+.service-option strong { color: #1f2933; font-weight: 700; }
+.service-option small { color: #66737f; }
