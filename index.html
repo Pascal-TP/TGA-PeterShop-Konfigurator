@@ -101,31 +101,29 @@
           </section>
           <section class="panel" data-step="4">
             <h2>4. Dachfläche</h2>
-            <p class="subtitle">
-              Wie groß ist die grundsätzlich für Photovoltaik nutzbare
-              Dachfläche?
-            </p>
-            <label
-              >Nutzbare Dachfläche in m²<input
-                id="area"
-                type="number"
-                min="1"
-                step="1"
-                placeholder="z. B. 85"
-            /></label>
-            <div class="hint">
-              Bitte nur Flächen berücksichtigen, die grundsätzlich mit
-              PV-Modulen belegt werden können.
+            <p class="subtitle">Wie soll die verfügbare Dachfläche angegeben werden?</p>
+            <div class="choice-grid" id="areaMode">
+              <button type="button" data-v="area" class="active"><b>Dachfläche eingeben</b><small>Angabe der nutzbaren Fläche in m²</small></button>
+              <button type="button" data-v="modules"><b>Modulanzahl eingeben</b><small>Die benötigte Modulfläche wird automatisch errechnet</small></button>
+            </div>
+            <div id="areaInputBox">
+              <label>Nutzbare Dachfläche in m²<input id="area" type="number" min="1" step="1" placeholder="z. B. 85" /></label>
+              <div class="hint">Bitte nur Flächen berücksichtigen, die grundsätzlich mit PV-Modulen belegt werden können.</div>
+            </div>
+            <div id="moduleCountInputBox" class="hidden">
+              <label>Gewünschte / mögliche Modulanzahl<input id="moduleCountInput" type="number" min="1" step="1" placeholder="z. B. 24" /></label>
+              <div id="calculatedAreaHint" class="hint">Aus der Modulanzahl wird die rechnerisch benötigte Modulfläche automatisch ermittelt.</div>
             </div>
           </section>
           <section class="panel" data-step="5">
             <h2>5. Jährlicher Stromverbrauch</h2>
             <p class="subtitle">Wie hoch ist der jährliche Stromverbrauch?</p>
             <div class="choice-grid" id="consumptionQuick">
-              <button data-v="2500">bis 3.000 kWh</button
-              ><button data-v="4000">3.000–5.000 kWh</button
-              ><button data-v="6500">5.000–8.000 kWh</button
-              ><button data-v="9000">über 8.000 kWh</button>
+              <button type="button" data-v="2500">bis 3.000 kWh</button
+              ><button type="button" data-v="4000">3.000–5.000 kWh</button
+              ><button type="button" data-v="6500">5.000–8.000 kWh</button
+              ><button type="button" data-v="9000">über 8.000 kWh</button>
+              <button type="button" data-v="unknown"><b>Keine Angabe</b><small>Keine verbrauchsabhängige Empfehlung</small></button>
             </div>
             <label
               >Stromverbrauch in kWh/Jahr<input
@@ -135,7 +133,7 @@
                 step="100"
                 placeholder="z. B. 5.800"
             /></label>
-            <div class="hint">Anhand des angegebenen Jahresstromverbrauchs wird zunächst die empfohlene Größe der Photovoltaikanlage ermittelt. Die verfügbare Dachfläche begrenzt dabei die maximal mögliche Modulanzahl.</div>
+            <div id="consumptionHint" class="hint">Anhand des angegebenen Jahresstromverbrauchs wird zunächst die empfohlene Größe der Photovoltaikanlage ermittelt. Die verfügbare Dachfläche begrenzt dabei die maximal mögliche Modulanzahl.</div>
           </section>
           <section class="panel" data-step="6">
             <h2>6. Bestandsanlage</h2>

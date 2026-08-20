@@ -7,7 +7,7 @@ const labels = [
 const s = {
   step: 0, max: 0, project: "", building: "", roof: "", cover: "",
   distanceMode: "plz", plz: "", manualDistanceKm: 0,
-  area: 0, consumption: 0, existing: "", existingKwp: 0, existingModules: 0,
+  areaMode: "area", area: 0, moduleCountInput: 0, consumption: 0, consumptionUnknown: false, existing: "", existingKwp: 0, existingModules: 0,
   storage: "", inverterBrand: "", storageBrand: "", storageSize: "auto",
   accessories: [], accessoryOptions: {
     wallboxBrand: "", wallboxArticle: "", cabinet: "", backup: "", scaffoldOrientation: "",
@@ -107,22 +107,32 @@ function extractCapacityKwh(product) {
 function recommend() {
   const area = +s.area || 0;
   const consumption = +s.consumption || 0;
-  const maxModules = Math.floor(area / MODULE.areaM2);
-  let targetKwp = Math.max(3, Math.min(33.3, consumption ? (consumption / 1000) * 1.65 : 6));
-  if (s.existing === "Erweiterung gewünscht") targetKwp = Math.max(3, targetKwp - (+s.existingKwp || 0));
+  const maxModules = s.areaMode === "modules" && s.moduleCountInput > 0
+    ? Math.floor(s.moduleCountInput)
+    : Math.floor(area / MODULE.areaM2);
   const moduleKwp = MODULE.pmaxWp / 1000;
+  const hasRecommendation = !s.consumptionUnknown && consumption > 0;
+  if (!hasRecommendation) {
+    return {
+      maxModules, recommendedModules: 0, recommendedKwp: 0, targetKwp: 0,
+      maxRoofKwp: +(maxModules * moduleKwp).toFixed(2), hasRecommendation: false,
+    };
+  }
+  let targetKwp = Math.max(3, Math.min(33.3, (consumption / 1000) * 1.65));
+  if (s.existing === "Erweiterung gewünscht") targetKwp = Math.max(3, targetKwp - (+s.existingKwp || 0));
   const targetModules = Math.ceil(targetKwp / moduleKwp);
   const recommendedModules = Math.max(0, Math.min(maxModules, targetModules));
   const recommendedKwp = +(recommendedModules * moduleKwp).toFixed(2);
   return {
     maxModules, recommendedModules, recommendedKwp, targetKwp,
-    maxRoofKwp: +(maxModules * moduleKwp).toFixed(2),
+    maxRoofKwp: +(maxModules * moduleKwp).toFixed(2), hasRecommendation: true,
   };
 }
 
 function selectedSizing() {
   const r = recommend();
-  const modules = s.sizingMode === "maximum" ? r.maxModules : r.recommendedModules;
+  const effectiveMode = r.hasRecommendation ? s.sizingMode : "maximum";
+  const modules = effectiveMode === "maximum" ? r.maxModules : r.recommendedModules;
   const kwp = +(modules * MODULE.pmaxWp / 1000).toFixed(2);
   return {
     ...r, modules, kwp,
@@ -269,8 +279,8 @@ function validate() {
     if (!/^\d{5}$/.test(s.plz)) return false;
     return !!getDistanceEntryForPlz(s.plz) || s.manualDistanceKm > 0;
   }
-  if (s.step === 4) return s.area > 0;
-  if (s.step === 5) return s.consumption > 0;
+  if (s.step === 4) return s.areaMode === "modules" ? s.moduleCountInput > 0 : s.area > 0;
+  if (s.step === 5) return s.consumptionUnknown || s.consumption > 0;
   if (s.step === 6) return !!s.existing && (s.existing !== "Erweiterung gewünscht" || s.existingKwp > 0);
   if (s.step === 7) return !!s.storage && !!s.inverterBrand && (s.storage !== "Ja" || !!s.storageBrand);
   if (s.step === 9) return !!s.dateChoice || !!s.wishDate;
@@ -287,9 +297,18 @@ function updateNext() {
 
 function renderSizingChoices() {
   const r = recommend();
-  $("recommendedSizingText").textContent = `${r.recommendedModules} Module · ${formatNumber(r.recommendedKwp, 2)} kWp`;
+  const recommendedButton = $("sizingMode").querySelector('button[data-v="recommended"]');
+  if (!r.hasRecommendation) {
+    s.sizingMode = "maximum";
+    recommendedButton.disabled = true;
+    recommendedButton.classList.remove("active");
+    $("recommendedSizingText").textContent = "nicht verfügbar – kein Stromverbrauch angegeben";
+  } else {
+    recommendedButton.disabled = false;
+    $("recommendedSizingText").textContent = `${r.recommendedModules} Module · ${formatNumber(r.recommendedKwp, 2)} kWp`;
+  }
   $("maximumSizingText").textContent = `${r.maxModules} Module · ${formatNumber(r.maxRoofKwp, 2)} kWp`;
-  [...$("sizingMode").querySelectorAll("button[data-v]")].forEach((b) => b.classList.toggle("active", b.dataset.v === s.sizingMode));
+  [...$("sizingMode").querySelectorAll("button[data-v]")].forEach((b) => b.classList.toggle("active", !b.disabled && b.dataset.v === s.sizingMode));
 }
 
 function show(i) {
@@ -309,7 +328,13 @@ function show(i) {
 function update() {
   s.project = $("project").value.trim(); s.plz = $("plz").value.trim();
   s.manualDistanceKm = +$("manualDistanceKm").value || 0;
-  s.area = +$("area").value || 0; s.consumption = +$("consumption").value || 0;
+  s.moduleCountInput = +$("moduleCountInput").value || 0;
+  if (s.areaMode === "modules") {
+    s.area = +(s.moduleCountInput * MODULE.areaM2).toFixed(2);
+  } else {
+    s.area = +$("area").value || 0;
+  }
+  s.consumption = s.consumptionUnknown ? 0 : (+$("consumption").value || 0);
   s.existingKwp = +$("existingKwp").value || 0; s.existingModules = +$("existingModules").value || 0;
   s.storageSize = $("storageSize").value; s.wishDate = $("wishDate").value;
   updateDistanceUI();
@@ -321,8 +346,8 @@ function update() {
   const boxes = [
     ["Projekt", s.project || "Keine Angabe"], ["Gebäude", s.building || "Noch nicht gewählt"],
     ["Dach", s.roof ? s.roof + (s.cover ? " · " + s.cover : "") : "Noch nicht gewählt"],
-    ["Standort", locationText], ["Dachfläche", s.area ? `${formatNumber(s.area)} m²` : "Noch offen"],
-    ["Stromverbrauch", s.consumption ? `${formatNumber(s.consumption)} kWh/Jahr` : "Noch offen"],
+    ["Standort", locationText], ["Dachfläche", s.area ? `${formatNumber(s.area, 2)} m²${s.areaMode === "modules" ? ` · ${formatNumber(s.moduleCountInput)} Module` : ""}` : "Noch offen"],
+    ["Stromverbrauch", s.consumptionUnknown ? "Keine Angabe" : (s.consumption ? `${formatNumber(s.consumption)} kWh/Jahr` : "Noch offen")],
     ["Bestandsanlage", s.existing || "Noch nicht gewählt"],
     ["Wechselrichter", s.inverterBrand || "Hersteller noch offen"],
     ["Speicher", s.storage ? (s.storage === "Ja" ? `Gewünscht${s.storageBrand ? ` · ${s.storageBrand}` : ""}` : "Nicht gewünscht") : "Noch nicht gewählt"],
@@ -330,7 +355,7 @@ function update() {
     ["Wunschtermin", s.wishDate ? new Date(s.wishDate + "T00:00").toLocaleDateString("de-DE") : s.dateChoice || "Noch offen"],
   ];
   let html = boxes.map(([title, value]) => `<div class="summary-box"><b>${title}</b><span>${escapeHtml(value)}</span></div>`).join("");
-  if (s.consumption && s.area) {
+  if (!s.consumptionUnknown && s.consumption && s.area) {
     const storageText = s.storage === "Ja" ? ` · Speicher ca. ${formatNumber(storageReco(), 1)} kWh` : "";
     html += `<div class="summary-box reco"><b>Vorläufige Empfehlung</b><span>${formatNumber(r.recommendedKwp, 2)} kWp · ${r.recommendedModules} Module${storageText}</span></div>`;
   }
@@ -410,9 +435,9 @@ function renderFinalCheck() {
     <div><strong>Gebäude</strong><span>${escapeHtml(s.building)}</span></div>
     <div><strong>Dach</strong><span>${escapeHtml(`${s.roof} · ${s.cover}`)}</span></div>
     <div><strong>Standort</strong><span>${escapeHtml(location)}</span></div>
-    <div><strong>Nutzbare Dachfläche</strong><span>${formatNumber(s.area)} m²</span></div>
-    <div><strong>Jahresverbrauch</strong><span>${formatNumber(s.consumption)} kWh</span></div>
-    <div><strong>Empfehlung</strong><span>${r.recommendedModules} Module · ${formatNumber(r.recommendedKwp, 2)} kWp</span></div>
+    <div><strong>Nutzbare Dachfläche</strong><span>${formatNumber(s.area, 2)} m²${s.areaMode === "modules" ? ` · aus ${formatNumber(s.moduleCountInput)} Modulen errechnet` : ""}</span></div>
+    <div><strong>Jahresverbrauch</strong><span>${s.consumptionUnknown ? "Keine Angabe" : `${formatNumber(s.consumption)} kWh`}</span></div>
+    <div><strong>Empfehlung</strong><span>${r.hasRecommendation ? `${r.recommendedModules} Module · ${formatNumber(r.recommendedKwp, 2)} kWp` : "Nicht verfügbar – kein Jahresstromverbrauch angegeben"}</span></div>
     <div><strong>Theoretisches Maximum</strong><span>${r.maxModules} Module · ${formatNumber(r.maxRoofKwp, 2)} kWp</span></div>
     <div><strong>Wechselrichter-Hersteller</strong><span>${escapeHtml(s.inverterBrand || "offen")}</span></div>
     <div><strong>Speicher</strong><span>${escapeHtml(storageText)}</span></div>
@@ -442,11 +467,11 @@ function calculate() {
   s.calculated = true; s.calculationDirty = false;
   $("startCalculationBtn").textContent = "Berechnung aktualisieren";
   $("startCalculationBtn").classList.remove("calc-update-attention");
-  const modeText = s.sizingMode === "maximum" ? "Theoretische Maximalbelegung" : "Verbrauchsabhängige Empfehlung";
+  const modeText = (!r.hasRecommendation || s.sizingMode === "maximum") ? "Theoretische Maximalbelegung" : "Verbrauchsabhängige Empfehlung";
   $("recommendation").innerHTML = `<strong>${modeText}</strong><div class="metric-grid">
     <div class="metric"><span>PV-Leistung</span><br><b>${formatNumber(r.kwp, 2)} kWp</b></div>
     <div class="metric"><span>Module</span><br><b>${r.modules}</b></div>
-    <div class="metric"><span>Empfehlung</span><br><b>${r.recommendedModules} Module</b></div>
+    <div class="metric"><span>Empfehlung</span><br><b>${r.hasRecommendation ? `${r.recommendedModules} Module` : "nicht verfügbar"}</b></div>
     <div class="metric"><span>Theoretisch max.</span><br><b>${r.maxModules} Module</b></div>
   </div>
   <p><strong>Modulbasis:</strong> ${MODULE.model}, ${MODULE.pmaxWp} Wp, ${formatNumber(MODULE.lengthM, 3)} × ${formatNumber(MODULE.widthM, 3)} m = ${formatNumber(MODULE.areaM2, 3)} m² je Modul.</p>
@@ -496,7 +521,25 @@ choose("cover", "cover", () => { markCalculationDirty(); });
 choose("existing", "existing", (v) => { $("existingDetails").classList.toggle("hidden", v !== "Erweiterung gewünscht"); markCalculationDirty(); });
 choose("storage", "storage", (v) => { $("storageDetails").classList.toggle("hidden", v !== "Ja"); if (v === "Ja") { updateStorageSizeOptions(); storageReco(); } markCalculationDirty(); });
 choose("dateChoice", "dateChoice");
-choose("consumptionQuick", "_quickConsumption", (v) => { $("consumption").value = v; s.consumption = +v; markCalculationDirty(); });
+$("consumptionQuick").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-v]"); if (!b) return;
+  [...$("consumptionQuick").querySelectorAll("button[data-v]")].forEach((x) => x.classList.toggle("active", x === b));
+  if (b.dataset.v === "unknown") {
+    s.consumptionUnknown = true;
+    s.consumption = 0;
+    $("consumption").value = "";
+    $("consumption").disabled = true;
+    $("consumptionHint").innerHTML = "<strong>Hinweis:</strong> Ohne Angabe des Jahresstromverbrauchs kann keine verbrauchsabhängige Anlagenempfehlung ausgesprochen werden. Die Mengen werden dann ausschließlich anhand der verfügbaren Dachfläche bzw. der angegebenen Modulanzahl ermittelt.";
+    s.sizingMode = "maximum";
+  } else {
+    s.consumptionUnknown = false;
+    $("consumption").disabled = false;
+    $("consumption").value = b.dataset.v;
+    s.consumption = +b.dataset.v;
+    $("consumptionHint").textContent = "Anhand des angegebenen Jahresstromverbrauchs wird zunächst die empfohlene Größe der Photovoltaikanlage ermittelt. Die verfügbare Dachfläche begrenzt dabei die maximal mögliche Modulanzahl.";
+  }
+  markCalculationDirty(); update();
+});
 
 $("distanceModeChoices").addEventListener("click", (e) => {
   const b = e.target.closest("button[data-v]"); if (!b) return;
@@ -514,8 +557,17 @@ $("storageBrand").addEventListener("click", (e) => {
   s.storageBrand = b.dataset.v; s.storageSize = "auto"; updateStorageSizeOptions(); markCalculationDirty(); update();
 });
 $("sizingMode").addEventListener("click", (e) => {
-  const b = e.target.closest("button[data-v]"); if (!b || s.sizingMode === b.dataset.v) return;
+  const b = e.target.closest("button[data-v]"); if (!b || b.disabled || s.sizingMode === b.dataset.v) return;
   s.sizingMode = b.dataset.v; renderSizingChoices(); markCalculationDirty(); renderFinalCheck();
+});
+
+$("areaMode").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-v]"); if (!b) return;
+  [...$("areaMode").querySelectorAll("button[data-v]")].forEach((x) => x.classList.toggle("active", x === b));
+  s.areaMode = b.dataset.v;
+  $("areaInputBox").classList.toggle("hidden", s.areaMode !== "area");
+  $("moduleCountInputBox").classList.toggle("hidden", s.areaMode !== "modules");
+  markCalculationDirty(); update();
 });
 
 $("accessories").onclick = (e) => {
@@ -525,8 +577,22 @@ $("accessories").onclick = (e) => {
   accessoryDetails(); markCalculationDirty(); update();
 };
 
-["project", "plz", "manualDistanceKm", "area", "consumption", "existingKwp", "existingModules", "wishDate"].forEach((id) => {
-  $(id).addEventListener("input", () => { if (["area", "consumption", "existingKwp", "existingModules"].includes(id)) markCalculationDirty(); update(); });
+["project", "plz", "manualDistanceKm", "area", "moduleCountInput", "consumption", "existingKwp", "existingModules", "wishDate"].forEach((id) => {
+  $(id).addEventListener("input", () => {
+    if (id === "consumption" && !$("consumption").disabled) {
+      s.consumptionUnknown = false;
+      [...$("consumptionQuick").querySelectorAll("button[data-v]")].forEach((x) => x.classList.remove("active"));
+      $("consumptionHint").textContent = "Anhand des angegebenen Jahresstromverbrauchs wird zunächst die empfohlene Größe der Photovoltaikanlage ermittelt. Die verfügbare Dachfläche begrenzt dabei die maximal mögliche Modulanzahl.";
+    }
+    if (["area", "moduleCountInput", "consumption", "existingKwp", "existingModules"].includes(id)) markCalculationDirty();
+    update();
+    if (id === "moduleCountInput") {
+      const count = +$("moduleCountInput").value || 0;
+      $("calculatedAreaHint").innerHTML = count
+        ? `<strong>Rechnerisch benötigte Modulfläche:</strong> ca. ${formatNumber(count * MODULE.areaM2, 2)} m² (${count} × ${formatNumber(MODULE.areaM2, 3)} m² je Modul).`
+        : "Aus der Modulanzahl wird die rechnerisch benötigte Modulfläche automatisch ermittelt.";
+    }
+  });
 });
 $("storageSize").addEventListener("change", () => { s.storageSize = $("storageSize").value; markCalculationDirty(); update(); });
 
